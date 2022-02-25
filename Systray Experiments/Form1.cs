@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +19,8 @@ namespace Systray_Experiments
     {
         private string _selectedMenuItem;
         private NotifyIcon messageTrayIcon;
-        
+        string workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
         public Form1(NotifyIcon trayIcon)
         {
             InitializeComponent();
@@ -267,6 +270,60 @@ namespace Systray_Experiments
             {
                 listBox_RunningProcesses.Items.Add(p.ProcessName + "\n");
             }
+        }
+
+        private void button_ExportProcessList_Click(object sender, EventArgs e)
+        {
+            string fileName = workingDirectory + @"\exportedProcessList.txt";
+
+            try
+            {
+                // Check if file already exists. If yes, delete it.     
+                if (File.Exists(fileName))
+                {
+                    File.Delete(fileName);
+                }
+
+                // Create a new file     
+                using (StreamWriter sw = File.CreateText(fileName))
+                {
+                   //write the items to file for safety reasons
+                   foreach (var item in listBox_KilList.Items )
+                   {
+                        sw.WriteLine(item.ToString());
+                   }
+                }
+            }
+            catch (Exception Ex)
+            {
+                messageTrayIcon.ShowBalloonTip(1000, "Export Error", "Could not export list to filesystem Error: " + Ex.Message, ToolTipIcon.Warning);
+            }
+        }
+
+        private void button_ImportProcessList_Click(object sender, EventArgs e)
+        {
+            //Security question to warn overwrite
+            string message = "The import of a list will overwrite your current list\n are you sure?";
+            string title = "Import Process-Kill-List";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, title, buttons);
+            if (result == DialogResult.No)
+            {
+                return;
+            }
+
+            string fileName = workingDirectory + @"\exportedProcessList.txt";
+
+            listBox_KilList.Items.Clear();
+            foreach(var line in File.ReadLines(fileName))
+            {
+                listBox_KilList.Items.Add(line);
+                if (!Properties.Settings.Default.programList.Contains(line))
+                {
+                    Properties.Settings.Default.programList.Add(line);
+                }
+            } 
+            Properties.Settings.Default.Save();
         }
     }
 }
