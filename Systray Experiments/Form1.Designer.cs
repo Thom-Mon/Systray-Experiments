@@ -46,6 +46,8 @@
             this.terminateonceProgram_ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip_runningProcesses = new System.Windows.Forms.ToolTip(this.components);
             this.listBox_RunningServices = new System.Windows.Forms.ListBox();
+            this.checkBox_log = new System.Windows.Forms.CheckBox();
+            this.checkBox_notification = new System.Windows.Forms.CheckBox();
             this.label_Services = new System.Windows.Forms.Label();
             this.label_RunningServicesCounter = new System.Windows.Forms.Label();
             this.listBox_StoppList = new System.Windows.Forms.ListBox();
@@ -57,12 +59,14 @@
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button_ExportProcessList = new System.Windows.Forms.Button();
             this.button_ImportProcessList = new System.Windows.Forms.Button();
-            this.checkBox_log = new System.Windows.Forms.CheckBox();
-            this.checkBox_notification = new System.Windows.Forms.CheckBox();
+            this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+            this.pictureBox_logfile = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip_ProcessList.SuspendLayout();
             this.contextMenu_RunningServices.SuspendLayout();
             this.contextMenu_DeleteService.SuspendLayout();
+            this.groupBox_Settings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_logfile)).BeginInit();
             this.SuspendLayout();
             // 
             // labelRunningProcesses
@@ -78,7 +82,7 @@
             // label_TotalKilled
             // 
             this.label_TotalKilled.AutoSize = true;
-            this.label_TotalKilled.Location = new System.Drawing.Point(366, 128);
+            this.label_TotalKilled.Location = new System.Drawing.Point(323, 48);
             this.label_TotalKilled.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_TotalKilled.Name = "label_TotalKilled";
             this.label_TotalKilled.Size = new System.Drawing.Size(114, 13);
@@ -88,7 +92,7 @@
             // label_TotalKilledCounter
             // 
             this.label_TotalKilledCounter.AutoSize = true;
-            this.label_TotalKilledCounter.Location = new System.Drawing.Point(486, 128);
+            this.label_TotalKilledCounter.Location = new System.Drawing.Point(441, 48);
             this.label_TotalKilledCounter.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_TotalKilledCounter.Name = "label_TotalKilledCounter";
             this.label_TotalKilledCounter.Size = new System.Drawing.Size(13, 13);
@@ -108,14 +112,14 @@
             // 
             // textBox_InputProgramName
             // 
-            this.textBox_InputProgramName.Location = new System.Drawing.Point(190, 104);
+            this.textBox_InputProgramName.Location = new System.Drawing.Point(195, 24);
             this.textBox_InputProgramName.Name = "textBox_InputProgramName";
             this.textBox_InputProgramName.Size = new System.Drawing.Size(155, 20);
             this.textBox_InputProgramName.TabIndex = 5;
             // 
             // button_AddProgramToList
             // 
-            this.button_AddProgramToList.Location = new System.Drawing.Point(351, 102);
+            this.button_AddProgramToList.Location = new System.Drawing.Point(356, 22);
             this.button_AddProgramToList.Name = "button_AddProgramToList";
             this.button_AddProgramToList.Size = new System.Drawing.Size(99, 23);
             this.button_AddProgramToList.TabIndex = 6;
@@ -126,7 +130,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(190, 150);
+            this.label1.Location = new System.Drawing.Point(195, 70);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(217, 13);
             this.label1.TabIndex = 8;
@@ -135,7 +139,7 @@
             // listBox_KilList
             // 
             this.listBox_KilList.FormattingEnabled = true;
-            this.listBox_KilList.Location = new System.Drawing.Point(193, 166);
+            this.listBox_KilList.Location = new System.Drawing.Point(198, 86);
             this.listBox_KilList.Name = "listBox_KilList";
             this.listBox_KilList.Size = new System.Drawing.Size(257, 199);
             this.listBox_KilList.TabIndex = 9;
@@ -194,12 +198,37 @@
             // 
             this.listBox_RunningServices.FormattingEnabled = true;
             this.listBox_RunningServices.Location = new System.Drawing.Point(10, 389);
-            this.listBox_RunningServices.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listBox_RunningServices.Margin = new System.Windows.Forms.Padding(2);
             this.listBox_RunningServices.Name = "listBox_RunningServices";
             this.listBox_RunningServices.Size = new System.Drawing.Size(172, 121);
             this.listBox_RunningServices.TabIndex = 14;
             this.toolTip_runningProcesses.SetToolTip(this.listBox_RunningServices, "shows the currently running services");
             this.listBox_RunningServices.MouseDown += new System.Windows.Forms.MouseEventHandler(this.serviceList_MouseDown);
+            // 
+            // checkBox_log
+            // 
+            this.checkBox_log.AutoSize = true;
+            this.checkBox_log.Location = new System.Drawing.Point(6, 19);
+            this.checkBox_log.Name = "checkBox_log";
+            this.checkBox_log.Size = new System.Drawing.Size(57, 17);
+            this.checkBox_log.TabIndex = 21;
+            this.checkBox_log.Text = "Logfile";
+            this.toolTip_runningProcesses.SetToolTip(this.checkBox_log, "Toogle Logfile on/off\r\nActivate to Log everything that is being terminated.");
+            this.checkBox_log.UseVisualStyleBackColor = true;
+            this.checkBox_log.CheckedChanged += new System.EventHandler(this.checkBox_log_CheckedChanged);
+            // 
+            // checkBox_notification
+            // 
+            this.checkBox_notification.AutoSize = true;
+            this.checkBox_notification.Location = new System.Drawing.Point(6, 42);
+            this.checkBox_notification.Name = "checkBox_notification";
+            this.checkBox_notification.Size = new System.Drawing.Size(83, 17);
+            this.checkBox_notification.TabIndex = 22;
+            this.checkBox_notification.Text = "Notify on kill";
+            this.toolTip_runningProcesses.SetToolTip(this.checkBox_notification, "Toogle Notification on/off\r\nShows a windows-notification every time the app kills" +
+        " a process.");
+            this.checkBox_notification.UseVisualStyleBackColor = true;
+            this.checkBox_notification.CheckedChanged += new System.EventHandler(this.checkBox_notification_CheckedChanged);
             // 
             // label_Services
             // 
@@ -225,8 +254,8 @@
             // listBox_StoppList
             // 
             this.listBox_StoppList.FormattingEnabled = true;
-            this.listBox_StoppList.Location = new System.Drawing.Point(193, 389);
-            this.listBox_StoppList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listBox_StoppList.Location = new System.Drawing.Point(198, 309);
+            this.listBox_StoppList.Margin = new System.Windows.Forms.Padding(2);
             this.listBox_StoppList.Name = "listBox_StoppList";
             this.listBox_StoppList.Size = new System.Drawing.Size(257, 121);
             this.listBox_StoppList.TabIndex = 17;
@@ -235,7 +264,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(190, 374);
+            this.label3.Location = new System.Drawing.Point(195, 294);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(214, 13);
             this.label3.TabIndex = 18;
@@ -281,53 +310,64 @@
             // 
             // button_ExportProcessList
             // 
-            this.button_ExportProcessList.Location = new System.Drawing.Point(457, 342);
+            this.button_ExportProcessList.BackColor = System.Drawing.SystemColors.Control;
+            this.button_ExportProcessList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_ExportProcessList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_ExportProcessList.Location = new System.Drawing.Point(423, 262);
             this.button_ExportProcessList.Name = "button_ExportProcessList";
-            this.button_ExportProcessList.Size = new System.Drawing.Size(42, 23);
+            this.button_ExportProcessList.Size = new System.Drawing.Size(32, 23);
             this.button_ExportProcessList.TabIndex = 19;
             this.button_ExportProcessList.Text = ">>";
-            this.button_ExportProcessList.UseVisualStyleBackColor = true;
+            this.toolTip_runningProcesses.SetToolTip(this.button_ExportProcessList, "Export\r\nExports the current deletionlist\r\n");
+            this.button_ExportProcessList.UseVisualStyleBackColor = false;
             this.button_ExportProcessList.Click += new System.EventHandler(this.button_ExportProcessList_Click);
             // 
             // button_ImportProcessList
             // 
-            this.button_ImportProcessList.Location = new System.Drawing.Point(458, 313);
+            this.button_ImportProcessList.BackColor = System.Drawing.SystemColors.Control;
+            this.button_ImportProcessList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_ImportProcessList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_ImportProcessList.Location = new System.Drawing.Point(422, 233);
             this.button_ImportProcessList.Name = "button_ImportProcessList";
-            this.button_ImportProcessList.Size = new System.Drawing.Size(42, 23);
+            this.button_ImportProcessList.Size = new System.Drawing.Size(33, 23);
             this.button_ImportProcessList.TabIndex = 20;
             this.button_ImportProcessList.Text = "<<";
-            this.button_ImportProcessList.UseVisualStyleBackColor = true;
+            this.toolTip_runningProcesses.SetToolTip(this.button_ImportProcessList, "Import \r\nImports the last exported deletionlist");
+            this.button_ImportProcessList.UseVisualStyleBackColor = false;
             this.button_ImportProcessList.Click += new System.EventHandler(this.button_ImportProcessList_Click);
             // 
-            // checkBox_log
+            // groupBox_Settings
             // 
-            this.checkBox_log.AutoSize = true;
-            this.checkBox_log.Location = new System.Drawing.Point(193, 516);
-            this.checkBox_log.Name = "checkBox_log";
-            this.checkBox_log.Size = new System.Drawing.Size(57, 17);
-            this.checkBox_log.TabIndex = 21;
-            this.checkBox_log.Text = "Logfile";
-            this.checkBox_log.UseVisualStyleBackColor = true;
-            this.checkBox_log.CheckedChanged += new System.EventHandler(this.checkBox_log_CheckedChanged);
+            this.groupBox_Settings.Controls.Add(this.pictureBox_logfile);
+            this.groupBox_Settings.Controls.Add(this.checkBox_notification);
+            this.groupBox_Settings.Controls.Add(this.checkBox_log);
+            this.groupBox_Settings.Location = new System.Drawing.Point(194, 437);
+            this.groupBox_Settings.Name = "groupBox_Settings";
+            this.groupBox_Settings.Size = new System.Drawing.Size(260, 73);
+            this.groupBox_Settings.TabIndex = 23;
+            this.groupBox_Settings.TabStop = false;
+            this.groupBox_Settings.Text = "Settings";
             // 
-            // checkBox_notification
+            // pictureBox_logfile
             // 
-            this.checkBox_notification.AutoSize = true;
-            this.checkBox_notification.Location = new System.Drawing.Point(265, 516);
-            this.checkBox_notification.Name = "checkBox_notification";
-            this.checkBox_notification.Size = new System.Drawing.Size(83, 17);
-            this.checkBox_notification.TabIndex = 22;
-            this.checkBox_notification.Text = "Notify on kill";
-            this.checkBox_notification.UseVisualStyleBackColor = true;
-            this.checkBox_notification.CheckedChanged += new System.EventHandler(this.checkBox_notification_CheckedChanged);
+            this.pictureBox_logfile.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox_logfile.Image = global::Systray_Experiments.Properties.Resources.magnifyingGlass;
+            this.pictureBox_logfile.Location = new System.Drawing.Point(57, 19);
+            this.pictureBox_logfile.Name = "pictureBox_logfile";
+            this.pictureBox_logfile.Size = new System.Drawing.Size(20, 17);
+            this.pictureBox_logfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_logfile.TabIndex = 23;
+            this.pictureBox_logfile.TabStop = false;
+            this.toolTip_runningProcesses.SetToolTip(this.pictureBox_logfile, "Open the Logfile\r\nThe file ist opened by the program you have installed to open ." +
+        "txt-Files");
+            this.pictureBox_logfile.Click += new System.EventHandler(this.pictureBox_logfile_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(517, 552);
-            this.Controls.Add(this.checkBox_notification);
-            this.Controls.Add(this.checkBox_log);
+            this.ClientSize = new System.Drawing.Size(484, 521);
+            this.Controls.Add(this.groupBox_Settings);
             this.Controls.Add(this.button_ImportProcessList);
             this.Controls.Add(this.button_ExportProcessList);
             this.Controls.Add(this.label3);
@@ -345,14 +385,17 @@
             this.Controls.Add(this.label_TotalKilled);
             this.Controls.Add(this.labelRunningProcesses);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.MinimumSize = new System.Drawing.Size(533, 591);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(500, 560);
             this.Name = "Form1";
             this.Text = "Edit Process Termination";
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip_ProcessList.ResumeLayout(false);
             this.contextMenu_RunningServices.ResumeLayout(false);
             this.contextMenu_DeleteService.ResumeLayout(false);
+            this.groupBox_Settings.ResumeLayout(false);
+            this.groupBox_Settings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_logfile)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -389,6 +432,8 @@
         private System.Windows.Forms.Button button_ImportProcessList;
         private System.Windows.Forms.CheckBox checkBox_log;
         private System.Windows.Forms.CheckBox checkBox_notification;
+        private System.Windows.Forms.GroupBox groupBox_Settings;
+        private System.Windows.Forms.PictureBox pictureBox_logfile;
     }
 }
 

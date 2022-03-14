@@ -389,5 +389,10 @@ namespace Systray_Experiments
                 messageTrayIcon.ShowBalloonTip(1000, title, message, icon);
             }
         }
+
+        private void pictureBox_logfile_Click(object sender, EventArgs e)
+        {
+            Process.Start(workingDirectory + @"\logfile.txt");
+        }
     }
 }

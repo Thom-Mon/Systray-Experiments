@@ -98,6 +98,7 @@
     <None Include="Resources\trashIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\magnifyingGlass.PNG" />
     <Content Include="trashIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
