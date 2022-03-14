@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ServiceProcess;
+using System.IO;
+using System.Reflection;
 
 namespace Systray_Experiments
 {
@@ -43,6 +45,7 @@ namespace Systray_Experiments
         Timer t = new Timer();
         ServiceController[] allServices; //stores all Services;
         Process[] processesToKill;
+        string workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         bool isStartUp = true;
         int counterServices = 0;
         int counterProcesses = 0;
@@ -96,18 +99,23 @@ namespace Systray_Experiments
                     }
                     catch
                     {
-                        trayIcon.ShowBalloonTip(1000, "Access Denied Error", process.ProcessName + " has not been killed", ToolTipIcon.Info);
+                        //trayIcon.ShowBalloonTip(1000, "Access Denied Error", process.ProcessName + " has not been killed", ToolTipIcon.Info);
+                        showBallonNotification("Access Denied Error", process.ProcessName + " has not been killed", ToolTipIcon.Info);
+                        logger("Process: " + process.ProcessName + " unable to kill");
                     }
                     Properties.Settings.Default.countTelemetryKilled += 1;
                     Properties.Settings.Default.Save();
 
                     if (!isStartUp) //only show BalloonTips if program is not just started
                     {
-                        trayIcon.ShowBalloonTip(1000, "Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                        //trayIcon.ShowBalloonTip(1000, "Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                        showBallonNotification("Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                        logger("Process: " + process.ProcessName + " killed");
                     }
                     else
                     {
                         counterProcesses++;
+                        logger("Process: " + process.ProcessName + " killed (Startup-Kill)");
                     }
                 }
             }
@@ -138,23 +146,28 @@ namespace Systray_Experiments
                             // Display the current service status.
                             if (!isStartUp)
                             {
-                                trayIcon.ShowBalloonTip(1000, "Service killed", ServiceName + " has been killed", ToolTipIcon.Warning);
+                                //trayIcon.ShowBalloonTip(1000, "Service killed", ServiceName + " has been killed", ToolTipIcon.Warning);
+                                showBallonNotification("Service killed", ServiceName + " has been killed", ToolTipIcon.Warning);
+                                logger("Service: " + ServiceName + " killed");
                             }
                             else
                             {
                                 counterServices++;
+                                logger("Service: " + ServiceName + " killed (Startup-Kill)");
                             }
                         }
                         catch (InvalidOperationException error)
                         {
-                            trayIcon.ShowBalloonTip(1000, "Service could not be stopped", ServiceName + " could not be stopped " +
+                            showBallonNotification("Service could not be stopped", ServiceName + " could not be stopped " +
                                 "\n Error: " + error.Message, ToolTipIcon.Warning);
+                            logger("Service: " + ServiceName + " unable to kill");
                         }
                     }
                 }
                 else
                 {
-                    trayIcon.ShowBalloonTip(1000, "Service could not be found", "Cannot find a service with this name: " + ServiceName, ToolTipIcon.Warning);
+                    //trayIcon.ShowBalloonTip(1000, "Service could not be found", "Cannot find a service with this name: " + ServiceName, ToolTipIcon.Warning);
+                    showBallonNotification("Service could not be found", "Cannot find a service with this name: " + ServiceName, ToolTipIcon.Warning);
                 }
             }
 
@@ -167,7 +180,25 @@ namespace Systray_Experiments
 
         private void showTryIconsOnStartUp()
         {
-            trayIcon.ShowBalloonTip(1000, "Termination on StartUp", counterProcesses + " Processes killed \n" + counterServices + " Services stopped.", ToolTipIcon.Warning);
+            //trayIcon.ShowBalloonTip(1000, "Termination on StartUp", counterProcesses + " Processes killed \n" + counterServices + " Services stopped.", ToolTipIcon.Warning);
+            showBallonNotification("Termination on StartUp", counterProcesses + " Processes killed \n" + counterServices + " Services stopped.", ToolTipIcon.Warning);
+        }
+
+        private void logger(string message) //TODO
+        {
+            if (Properties.Settings.Default.logfile)
+            {
+                string filePath = workingDirectory + @"\logfile.txt";
+                File.AppendAllText(filePath, message + " - " + DateTime.Now + "\n");
+            }
+        }
+
+        private void showBallonNotification(string title, string message, ToolTipIcon icon)
+        {
+            if (Properties.Settings.Default.shownotification)
+            {
+                trayIcon.ShowBalloonTip(1000, title, message, icon);
+            }
         }
     }
 }

@@ -60,5 +60,29 @@ namespace Systray_Experiments.Properties {
                 this["serviceList"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool logfile {
+            get {
+                return ((bool)(this["logfile"]));
+            }
+            set {
+                this["logfile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool shownotification {
+            get {
+                return ((bool)(this["shownotification"]));
+            }
+            set {
+                this["shownotification"] = value;
+            }
+        }
     }
 }

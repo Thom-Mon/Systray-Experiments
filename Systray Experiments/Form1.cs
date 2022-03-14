@@ -34,16 +34,19 @@ namespace Systray_Experiments
             //Show amount of current running processes and services
             label_ProcessCounter.Text = listBox_RunningProcesses.Items.Count.ToString();
             label_RunningServicesCounter.Text = listBox_RunningServices.Items.Count.ToString();
+            //setup the checkboxes for logging and notification on startup from settings
+            checkBox_log.Checked = Properties.Settings.Default.logfile;
+            checkBox_notification.Checked = Properties.Settings.Default.shownotification;
 
             //Show all unallowed programs in listbox on startup
             foreach (string programName in Properties.Settings.Default.programList.Cast<string>().ToArray())
             {
-                listBox_KilList.Items.Add(programName);
+                    listBox_KilList.Items.Add(programName);
             }
             //Show all unallowed services in listbox on startup
             foreach (string serviceName in Properties.Settings.Default.serviceList.Cast<string>().ToArray())
             {
-                listBox_StoppList.Items.Add(serviceName);
+                    listBox_StoppList.Items.Add(serviceName);
             }
         }
 
@@ -210,11 +213,13 @@ namespace Systray_Experiments
                 {
                     sc.Stop();
                     sc.WaitForStatus(ServiceControllerStatus.Stopped);
-                    messageTrayIcon.ShowBalloonTip(1000, "Service was stopped by User", cleanServiceName + " has been stopped", ToolTipIcon.Warning);
+                    showBallonNotification("Service was stopped by User", cleanServiceName + " has been stopped", ToolTipIcon.Warning);
                 }
                 catch (InvalidOperationException error)
                 {
-                    messageTrayIcon.ShowBalloonTip(1000, "Service could not be stopped", cleanServiceName + " could not be stopped " +
+               //     messageTrayIcon.ShowBalloonTip(1000, "Service could not be stopped", cleanServiceName + " could not be stopped " +
+               // "\n Error: " + error.Message, ToolTipIcon.Warning);
+                    showBallonNotification("Service could not be stopped", cleanServiceName + " could not be stopped " +
                 "\n Error: " + error.Message, ToolTipIcon.Warning);
                 }
             }
@@ -233,11 +238,14 @@ namespace Systray_Experiments
                 {
                     process.Kill();
                     process.WaitForExit();
-                    messageTrayIcon.ShowBalloonTip(1000, "Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                    //messageTrayIcon.ShowBalloonTip(1000, "Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                    showBallonNotification("Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                    logger("Process: " + process.ProcessName + " killed by User");
                 }
                 catch
                 {
-                    messageTrayIcon.ShowBalloonTip(1000, "Access Denied Error", process.ProcessName + " has not been killed", ToolTipIcon.Info);
+                    //messageTrayIcon.ShowBalloonTip(1000, "Access Denied Error", process.ProcessName + " has not been killed", ToolTipIcon.Info);
+                    showBallonNotification("Access Denied Error", process.ProcessName + " has not been killed", ToolTipIcon.Info);
                 }
             }
             reloadProgramList();
@@ -254,7 +262,10 @@ namespace Systray_Experiments
             {
                 if (service.Status == ServiceControllerStatus.Running)
                 {
-                    listBox_RunningServices.Items.Add(service.DisplayName + "\n");
+                    if (!listBox_RunningServices.Items.Contains(service.DisplayName))
+                    {
+                        listBox_RunningServices.Items.Add(service.DisplayName + "\n");
+                    }
                 }
             }
         }
@@ -262,13 +273,19 @@ namespace Systray_Experiments
         private void reloadProgramList()
         {
             listBox_RunningProcesses.Items.Clear();
+            //listBox_RunningProcesses.BackColor = Color.Green;
+            //listBox_RunningProcesses.DrawMode = DrawMode.OwnerDrawFixed;
+            //listBox_RunningProcesses.DrawItem += new DrawItemEventHandler(listBox_SetColor);
             
             Process[] allProcesses = Process.GetProcesses();
             Array.Sort(allProcesses, (x, y) => String.Compare(x.ProcessName, y.ProcessName));
             
             foreach (Process p in allProcesses)
             {
-                listBox_RunningProcesses.Items.Add(p.ProcessName + "\n");
+                if (!listBox_RunningProcesses.Items.Contains(p.ProcessName + "\n"))
+                {
+                    listBox_RunningProcesses.Items.Add(p.ProcessName + "\n");
+                }
             }
         }
 
@@ -296,7 +313,7 @@ namespace Systray_Experiments
             }
             catch (Exception Ex)
             {
-                messageTrayIcon.ShowBalloonTip(1000, "Export Error", "Could not export list to filesystem Error: " + Ex.Message, ToolTipIcon.Warning);
+                showBallonNotification("Export Error", "Could not export list to filesystem Error: " + Ex.Message, ToolTipIcon.Warning);
             }
         }
 
@@ -324,6 +341,53 @@ namespace Systray_Experiments
                 }
             } 
             Properties.Settings.Default.Save();
+        }
+
+        private void logger(string message) //TODO
+        {
+            if (checkBox_log.Checked)
+            {
+                string filePath = workingDirectory + @"\logfile.txt";
+                File.AppendAllText(filePath, message + " - " + DateTime.Now + "\n");
+            }
+        }
+
+        //change status: logging all kills
+        private void checkBox_log_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox_log.Checked)
+            {
+                Properties.Settings.Default.logfile = true;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                Properties.Settings.Default.logfile = false;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        //change status: showing balloon tipps on kill
+        private void checkBox_notification_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_notification.Checked)
+            {
+                Properties.Settings.Default.shownotification = true;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                Properties.Settings.Default.shownotification = false;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void showBallonNotification(string title, string message, ToolTipIcon icon)
+        {
+            if (Properties.Settings.Default.shownotification)
+            {
+                messageTrayIcon.ShowBalloonTip(1000, title, message, icon);
+            }
         }
     }
 }
