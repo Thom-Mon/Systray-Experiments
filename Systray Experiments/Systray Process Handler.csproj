@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\magnifyingGlass.PNG" />
+    <None Include="Resources\reloadIcon.PNG" />
     <Content Include="trashIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

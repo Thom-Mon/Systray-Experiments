@@ -29,8 +29,6 @@ namespace Systray_Experiments
             reloadProgramList();
             reloadServiceList();
             
-            //Show killed Processes as Int 
-            label_TotalKilledCounter.Text = Properties.Settings.Default.countTelemetryKilled.ToString();
             //Show amount of current running processes and services
             label_ProcessCounter.Text = listBox_RunningProcesses.Items.Count.ToString();
             label_RunningServicesCounter.Text = listBox_RunningServices.Items.Count.ToString();
@@ -268,6 +266,7 @@ namespace Systray_Experiments
                     }
                 }
             }
+            label_RunningServicesCounter.Text = listBox_RunningServices.Items.Count.ToString();
         }
 
         private void reloadProgramList()
@@ -287,6 +286,7 @@ namespace Systray_Experiments
                     listBox_RunningProcesses.Items.Add(p.ProcessName + "\n");
                 }
             }
+            label_ProcessCounter.Text = listBox_RunningProcesses.Items.Count.ToString();
         }
 
         private void button_ExportProcessList_Click(object sender, EventArgs e)
@@ -392,7 +392,16 @@ namespace Systray_Experiments
 
         private void pictureBox_logfile_Click(object sender, EventArgs e)
         {
-            Process.Start(workingDirectory + @"\logfile.txt");
+            if (File.Exists(workingDirectory + @"\logfile.txt"))
+            {
+                Process.Start(workingDirectory + @"\logfile.txt");
+            }
+        }
+
+        private void pictureBox_reload_Click(object sender, EventArgs e)
+        {
+            reloadProgramList();
+            reloadServiceList();
         }
     }
 }

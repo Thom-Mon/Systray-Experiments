@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.labelRunningProcesses = new System.Windows.Forms.Label();
-            this.label_TotalKilled = new System.Windows.Forms.Label();
-            this.label_TotalKilledCounter = new System.Windows.Forms.Label();
             this.label_ProcessCounter = new System.Windows.Forms.Label();
             this.textBox_InputProgramName = new System.Windows.Forms.TextBox();
             this.button_AddProgramToList = new System.Windows.Forms.Button();
@@ -48,6 +46,9 @@
             this.listBox_RunningServices = new System.Windows.Forms.ListBox();
             this.checkBox_log = new System.Windows.Forms.CheckBox();
             this.checkBox_notification = new System.Windows.Forms.CheckBox();
+            this.button_ExportProcessList = new System.Windows.Forms.Button();
+            this.button_ImportProcessList = new System.Windows.Forms.Button();
+            this.pictureBox_logfile = new System.Windows.Forms.PictureBox();
             this.label_Services = new System.Windows.Forms.Label();
             this.label_RunningServicesCounter = new System.Windows.Forms.Label();
             this.listBox_StoppList = new System.Windows.Forms.ListBox();
@@ -57,16 +58,15 @@
             this.terminateonceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu_DeleteService = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button_ExportProcessList = new System.Windows.Forms.Button();
-            this.button_ImportProcessList = new System.Windows.Forms.Button();
             this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-            this.pictureBox_logfile = new System.Windows.Forms.PictureBox();
+            this.pictureBox_reload = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip_ProcessList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_logfile)).BeginInit();
             this.contextMenu_RunningServices.SuspendLayout();
             this.contextMenu_DeleteService.SuspendLayout();
             this.groupBox_Settings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_logfile)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_reload)).BeginInit();
             this.SuspendLayout();
             // 
             // labelRunningProcesses
@@ -78,26 +78,6 @@
             this.labelRunningProcesses.Size = new System.Drawing.Size(108, 13);
             this.labelRunningProcesses.TabIndex = 0;
             this.labelRunningProcesses.Text = "Running Processes...";
-            // 
-            // label_TotalKilled
-            // 
-            this.label_TotalKilled.AutoSize = true;
-            this.label_TotalKilled.Location = new System.Drawing.Point(323, 48);
-            this.label_TotalKilled.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label_TotalKilled.Name = "label_TotalKilled";
-            this.label_TotalKilled.Size = new System.Drawing.Size(114, 13);
-            this.label_TotalKilled.TabIndex = 2;
-            this.label_TotalKilled.Text = "Total Killed Processes:";
-            // 
-            // label_TotalKilledCounter
-            // 
-            this.label_TotalKilledCounter.AutoSize = true;
-            this.label_TotalKilledCounter.Location = new System.Drawing.Point(441, 48);
-            this.label_TotalKilledCounter.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label_TotalKilledCounter.Name = "label_TotalKilledCounter";
-            this.label_TotalKilledCounter.Size = new System.Drawing.Size(13, 13);
-            this.label_TotalKilledCounter.TabIndex = 3;
-            this.label_TotalKilledCounter.Text = "0";
             // 
             // label_ProcessCounter
             // 
@@ -112,14 +92,14 @@
             // 
             // textBox_InputProgramName
             // 
-            this.textBox_InputProgramName.Location = new System.Drawing.Point(195, 24);
+            this.textBox_InputProgramName.Location = new System.Drawing.Point(195, 46);
             this.textBox_InputProgramName.Name = "textBox_InputProgramName";
             this.textBox_InputProgramName.Size = new System.Drawing.Size(155, 20);
             this.textBox_InputProgramName.TabIndex = 5;
             // 
             // button_AddProgramToList
             // 
-            this.button_AddProgramToList.Location = new System.Drawing.Point(356, 22);
+            this.button_AddProgramToList.Location = new System.Drawing.Point(356, 44);
             this.button_AddProgramToList.Name = "button_AddProgramToList";
             this.button_AddProgramToList.Size = new System.Drawing.Size(99, 23);
             this.button_AddProgramToList.TabIndex = 6;
@@ -197,10 +177,10 @@
             // listBox_RunningServices
             // 
             this.listBox_RunningServices.FormattingEnabled = true;
-            this.listBox_RunningServices.Location = new System.Drawing.Point(10, 389);
+            this.listBox_RunningServices.Location = new System.Drawing.Point(11, 405);
             this.listBox_RunningServices.Margin = new System.Windows.Forms.Padding(2);
             this.listBox_RunningServices.Name = "listBox_RunningServices";
-            this.listBox_RunningServices.Size = new System.Drawing.Size(172, 121);
+            this.listBox_RunningServices.Size = new System.Drawing.Size(172, 95);
             this.listBox_RunningServices.TabIndex = 14;
             this.toolTip_runningProcesses.SetToolTip(this.listBox_RunningServices, "shows the currently running services");
             this.listBox_RunningServices.MouseDown += new System.Windows.Forms.MouseEventHandler(this.serviceList_MouseDown);
@@ -230,10 +210,52 @@
             this.checkBox_notification.UseVisualStyleBackColor = true;
             this.checkBox_notification.CheckedChanged += new System.EventHandler(this.checkBox_notification_CheckedChanged);
             // 
+            // button_ExportProcessList
+            // 
+            this.button_ExportProcessList.BackColor = System.Drawing.SystemColors.Control;
+            this.button_ExportProcessList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_ExportProcessList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_ExportProcessList.Location = new System.Drawing.Point(423, 262);
+            this.button_ExportProcessList.Name = "button_ExportProcessList";
+            this.button_ExportProcessList.Size = new System.Drawing.Size(32, 23);
+            this.button_ExportProcessList.TabIndex = 19;
+            this.button_ExportProcessList.Text = ">>";
+            this.toolTip_runningProcesses.SetToolTip(this.button_ExportProcessList, "Export\r\nExports the current deletionlist\r\n");
+            this.button_ExportProcessList.UseVisualStyleBackColor = false;
+            this.button_ExportProcessList.Click += new System.EventHandler(this.button_ExportProcessList_Click);
+            // 
+            // button_ImportProcessList
+            // 
+            this.button_ImportProcessList.BackColor = System.Drawing.SystemColors.Control;
+            this.button_ImportProcessList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button_ImportProcessList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_ImportProcessList.Location = new System.Drawing.Point(422, 233);
+            this.button_ImportProcessList.Name = "button_ImportProcessList";
+            this.button_ImportProcessList.Size = new System.Drawing.Size(33, 23);
+            this.button_ImportProcessList.TabIndex = 20;
+            this.button_ImportProcessList.Text = "<<";
+            this.toolTip_runningProcesses.SetToolTip(this.button_ImportProcessList, "Import \r\nImports the last exported deletionlist");
+            this.button_ImportProcessList.UseVisualStyleBackColor = false;
+            this.button_ImportProcessList.Click += new System.EventHandler(this.button_ImportProcessList_Click);
+            // 
+            // pictureBox_logfile
+            // 
+            this.pictureBox_logfile.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox_logfile.Image = global::Systray_Experiments.Properties.Resources.magnifyingGlass;
+            this.pictureBox_logfile.Location = new System.Drawing.Point(57, 19);
+            this.pictureBox_logfile.Name = "pictureBox_logfile";
+            this.pictureBox_logfile.Size = new System.Drawing.Size(20, 17);
+            this.pictureBox_logfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_logfile.TabIndex = 23;
+            this.pictureBox_logfile.TabStop = false;
+            this.toolTip_runningProcesses.SetToolTip(this.pictureBox_logfile, "Open the Logfile\r\nThe file ist opened by the program you have installed to open ." +
+        "txt-Files");
+            this.pictureBox_logfile.Click += new System.EventHandler(this.pictureBox_logfile_Click);
+            // 
             // label_Services
             // 
             this.label_Services.AutoSize = true;
-            this.label_Services.Location = new System.Drawing.Point(7, 374);
+            this.label_Services.Location = new System.Drawing.Point(11, 387);
             this.label_Services.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_Services.Name = "label_Services";
             this.label_Services.Size = new System.Drawing.Size(100, 13);
@@ -244,7 +266,7 @@
             // 
             this.label_RunningServicesCounter.AutoSize = true;
             this.label_RunningServicesCounter.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label_RunningServicesCounter.Location = new System.Drawing.Point(160, 374);
+            this.label_RunningServicesCounter.Location = new System.Drawing.Point(115, 387);
             this.label_RunningServicesCounter.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_RunningServicesCounter.Name = "label_RunningServicesCounter";
             this.label_RunningServicesCounter.Size = new System.Drawing.Size(13, 13);
@@ -308,34 +330,6 @@
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.delete_serviceItemFromList_Click);
             // 
-            // button_ExportProcessList
-            // 
-            this.button_ExportProcessList.BackColor = System.Drawing.SystemColors.Control;
-            this.button_ExportProcessList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_ExportProcessList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_ExportProcessList.Location = new System.Drawing.Point(423, 262);
-            this.button_ExportProcessList.Name = "button_ExportProcessList";
-            this.button_ExportProcessList.Size = new System.Drawing.Size(32, 23);
-            this.button_ExportProcessList.TabIndex = 19;
-            this.button_ExportProcessList.Text = ">>";
-            this.toolTip_runningProcesses.SetToolTip(this.button_ExportProcessList, "Export\r\nExports the current deletionlist\r\n");
-            this.button_ExportProcessList.UseVisualStyleBackColor = false;
-            this.button_ExportProcessList.Click += new System.EventHandler(this.button_ExportProcessList_Click);
-            // 
-            // button_ImportProcessList
-            // 
-            this.button_ImportProcessList.BackColor = System.Drawing.SystemColors.Control;
-            this.button_ImportProcessList.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button_ImportProcessList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_ImportProcessList.Location = new System.Drawing.Point(422, 233);
-            this.button_ImportProcessList.Name = "button_ImportProcessList";
-            this.button_ImportProcessList.Size = new System.Drawing.Size(33, 23);
-            this.button_ImportProcessList.TabIndex = 20;
-            this.button_ImportProcessList.Text = "<<";
-            this.toolTip_runningProcesses.SetToolTip(this.button_ImportProcessList, "Import \r\nImports the last exported deletionlist");
-            this.button_ImportProcessList.UseVisualStyleBackColor = false;
-            this.button_ImportProcessList.Click += new System.EventHandler(this.button_ImportProcessList_Click);
-            // 
             // groupBox_Settings
             // 
             this.groupBox_Settings.Controls.Add(this.pictureBox_logfile);
@@ -348,25 +342,24 @@
             this.groupBox_Settings.TabStop = false;
             this.groupBox_Settings.Text = "Settings";
             // 
-            // pictureBox_logfile
+            // pictureBox_reload
             // 
-            this.pictureBox_logfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox_logfile.Image = global::Systray_Experiments.Properties.Resources.magnifyingGlass;
-            this.pictureBox_logfile.Location = new System.Drawing.Point(57, 19);
-            this.pictureBox_logfile.Name = "pictureBox_logfile";
-            this.pictureBox_logfile.Size = new System.Drawing.Size(20, 17);
-            this.pictureBox_logfile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox_logfile.TabIndex = 23;
-            this.pictureBox_logfile.TabStop = false;
-            this.toolTip_runningProcesses.SetToolTip(this.pictureBox_logfile, "Open the Logfile\r\nThe file ist opened by the program you have installed to open ." +
-        "txt-Files");
-            this.pictureBox_logfile.Click += new System.EventHandler(this.pictureBox_logfile_Click);
+            this.pictureBox_reload.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox_reload.Image = global::Systray_Experiments.Properties.Resources.reloadIcon;
+            this.pictureBox_reload.Location = new System.Drawing.Point(150, 369);
+            this.pictureBox_reload.Name = "pictureBox_reload";
+            this.pictureBox_reload.Size = new System.Drawing.Size(32, 31);
+            this.pictureBox_reload.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_reload.TabIndex = 24;
+            this.pictureBox_reload.TabStop = false;
+            this.pictureBox_reload.Click += new System.EventHandler(this.pictureBox_reload_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 521);
+            this.Controls.Add(this.pictureBox_reload);
             this.Controls.Add(this.groupBox_Settings);
             this.Controls.Add(this.button_ImportProcessList);
             this.Controls.Add(this.button_ExportProcessList);
@@ -381,8 +374,6 @@
             this.Controls.Add(this.button_AddProgramToList);
             this.Controls.Add(this.textBox_InputProgramName);
             this.Controls.Add(this.label_ProcessCounter);
-            this.Controls.Add(this.label_TotalKilledCounter);
-            this.Controls.Add(this.label_TotalKilled);
             this.Controls.Add(this.labelRunningProcesses);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -391,11 +382,12 @@
             this.Text = "Edit Process Termination";
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip_ProcessList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_logfile)).EndInit();
             this.contextMenu_RunningServices.ResumeLayout(false);
             this.contextMenu_DeleteService.ResumeLayout(false);
             this.groupBox_Settings.ResumeLayout(false);
             this.groupBox_Settings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_logfile)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_reload)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -404,8 +396,6 @@
         #endregion
 
         private System.Windows.Forms.Label labelRunningProcesses;
-        private System.Windows.Forms.Label label_TotalKilled;
-        private System.Windows.Forms.Label label_TotalKilledCounter;
         private System.Windows.Forms.Label label_ProcessCounter;
         private System.Windows.Forms.TextBox textBox_InputProgramName;
         private System.Windows.Forms.Button button_AddProgramToList;
@@ -434,6 +424,7 @@
         private System.Windows.Forms.CheckBox checkBox_notification;
         private System.Windows.Forms.GroupBox groupBox_Settings;
         private System.Windows.Forms.PictureBox pictureBox_logfile;
+        private System.Windows.Forms.PictureBox pictureBox_reload;
     }
 }
 
