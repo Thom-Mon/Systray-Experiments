@@ -1,4 +1,4 @@
-# Systray-Experiments
+# Systray-Process-Handler
 ## Process and Service Handler with Systray Implementation
 
 A simple program in C# that starts minimized in the systray. With the program the user can set a list of programs to be killed or a list of services to stopp. 
