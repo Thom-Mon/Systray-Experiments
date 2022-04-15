@@ -380,6 +380,7 @@ namespace Systray_Experiments
                 Properties.Settings.Default.shownotification = false;
                 Properties.Settings.Default.Save();
             }
+            //label1.Text = Properties.Settings.Default.shownotification.ToString();
         }
 
         private void showBallonNotification(string title, string message, ToolTipIcon icon)

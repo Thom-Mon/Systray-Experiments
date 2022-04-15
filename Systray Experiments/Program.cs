@@ -46,6 +46,7 @@ namespace Systray_Experiments
         ServiceController[] allServices; //stores all Services;
         Process[] processesToKill;
         string workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        bool showNotification = Properties.Settings.Default.shownotification;
         bool isStartUp = true;
         int counterServices = 0;
         int counterProcesses = 0;
@@ -106,7 +107,7 @@ namespace Systray_Experiments
                     Properties.Settings.Default.countTelemetryKilled += 1;
                     Properties.Settings.Default.Save();
 
-                    if (!isStartUp) //only show BalloonTips if program is not just started
+                    if (!isStartUp && showNotification) //only show BalloonTips if program is not just started
                     {
                         //trayIcon.ShowBalloonTip(1000, "Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
                         showBallonNotification("Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
@@ -144,7 +145,7 @@ namespace Systray_Experiments
                             sc.WaitForStatus(ServiceControllerStatus.Stopped);
 
                             // Display the current service status.
-                            if (!isStartUp)
+                            if (!isStartUp && showNotification)
                             {
                                 //trayIcon.ShowBalloonTip(1000, "Service killed", ServiceName + " has been killed", ToolTipIcon.Warning);
                                 showBallonNotification("Service killed", ServiceName + " has been killed", ToolTipIcon.Warning);
@@ -180,7 +181,6 @@ namespace Systray_Experiments
 
         private void showTryIconsOnStartUp()
         {
-            //trayIcon.ShowBalloonTip(1000, "Termination on StartUp", counterProcesses + " Processes killed \n" + counterServices + " Services stopped.", ToolTipIcon.Warning);
             showBallonNotification("Termination on StartUp", counterProcesses + " Processes killed \n" + counterServices + " Services stopped.", ToolTipIcon.Warning);
         }
 
