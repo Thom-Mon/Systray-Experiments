@@ -107,11 +107,14 @@ namespace Systray_Experiments
                     Properties.Settings.Default.countTelemetryKilled += 1;
                     Properties.Settings.Default.Save();
 
-                    if (!isStartUp && showNotification) //only show BalloonTips if program is not just started
+                    if (!isStartUp) //only show BalloonTips if program is not just started
                     {
                         //trayIcon.ShowBalloonTip(1000, "Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
-                        showBallonNotification("Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
                         logger("Process: " + process.ProcessName + " killed");
+                        if (showNotification)
+                        {
+                            showBallonNotification("Process killed", process.ProcessName + " has been killed", ToolTipIcon.Info);
+                        }
                     }
                     else
                     {
