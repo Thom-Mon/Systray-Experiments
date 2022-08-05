@@ -96,11 +96,12 @@ namespace Systray_Experiments
                 contextMenuStrip1.Visible = false;
             }
         }
-
+       
         private void processList_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Right) return;
             var index = listBox_RunningProcesses.IndexFromPoint(e.Location);
+            
             if (index != ListBox.NoMatches)
             {
                 _selectedMenuItem = listBox_RunningProcesses.Items[index].ToString();
@@ -248,6 +249,13 @@ namespace Systray_Experiments
             }
             reloadProgramList();
         }
+        private void markAsKnownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string filePath = workingDirectory + @"\knownProcesses.txt";
+            string cleanProcessName = listBox_RunningProcesses.SelectedItem.ToString().Replace("\n", "");
+
+            File.AppendAllText(filePath, cleanProcessName + Environment.NewLine);
+        }
 
         private void reloadServiceList()
         {
@@ -271,11 +279,14 @@ namespace Systray_Experiments
 
         private void reloadProgramList()
         {
+            listBox_RunningProcesses.DrawItem += new DrawItemEventHandler(listBox_ColorHandler);
             listBox_RunningProcesses.Items.Clear();
+            //listBox_RunningProcesses.DrawMode = DrawMode.OwnerDrawVariable;
             //listBox_RunningProcesses.BackColor = Color.Green;
-            //listBox_RunningProcesses.DrawMode = DrawMode.OwnerDrawFixed;
-            //listBox_RunningProcesses.DrawItem += new DrawItemEventHandler(listBox_SetColor);
-            
+            //listBox_RunningProcesses.ForeColor = Color.Orange;
+
+            //listBox_RunningProcesses.DrawItem += new DrawItemEventHandler(listBox_ColorHandler);
+
             Process[] allProcesses = Process.GetProcesses();
             Array.Sort(allProcesses, (x, y) => String.Compare(x.ProcessName, y.ProcessName));
             
@@ -288,7 +299,40 @@ namespace Systray_Experiments
             }
             label_ProcessCounter.Text = listBox_RunningProcesses.Items.Count.ToString();
         }
+        
+        // Anmerkung: vielleicht nicht jedes Mal die Datei lesen, sondern einmal alle Werte auslesen, beim Refresh
+        // in übergeordnete Variable und diese auslesen
+        private void listBox_ColorHandler(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index == -1) { return; }
+            // Draw the background of the ListBox control for each item.
+            e.DrawBackground();
+            // Define the default color of the brush as red, as they are unknown.
+            Brush myBrush = Brushes.DarkRed;
+            //textBox_InputProgramName.Text=  listBox_RunningProcesses.Items[e.Index].ToString();
+            string filePath = workingDirectory + @"\knownProcesses.txt";
+            
+            // every process listed in the "filePath" is marked green as known process
+            foreach (var line in File.ReadLines(filePath))
+            {
+                if (listBox_RunningProcesses.Items[e.Index].ToString().Replace("\n", "") == line.Replace("\n", ""))
+                {
+                    myBrush = Brushes.DarkGreen;
+                }
+            }
 
+            // Draw the current item text based on the current Font  
+            // and the custom brush settings.
+            e.Graphics.DrawString(
+                (sender as ListBox).Items[e.Index].ToString(),
+                e.Font, 
+                myBrush, 
+                e.Bounds, 
+                StringFormat.GenericTypographic);
+            // If the ListBox has focus, draw a focus rectangle around the selected item.
+            e.DrawFocusRectangle();
+        }
+        //END
         private void button_ExportProcessList_Click(object sender, EventArgs e)
         {
             string fileName = workingDirectory + @"\exportedProcessList.txt";
@@ -404,5 +448,7 @@ namespace Systray_Experiments
             reloadProgramList();
             reloadServiceList();
         }
+
+       
     }
 }
