@@ -311,7 +311,10 @@ namespace Systray_Experiments
             Brush myBrush = Brushes.DarkRed;
             //textBox_InputProgramName.Text=  listBox_RunningProcesses.Items[e.Index].ToString();
             string filePath = workingDirectory + @"\knownProcesses.txt";
-            
+            if(!File.Exists(filePath))
+            {
+                File.CreateText(filePath);
+            }
             // every process listed in the "filePath" is marked green as known process
             foreach (var line in File.ReadLines(filePath))
             {
